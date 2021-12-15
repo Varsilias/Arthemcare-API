@@ -16,7 +16,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth.jwt', ['except' => ['login', 'register']]);
     }
 
     public function register(Request $request)
@@ -73,16 +73,8 @@ class AuthController extends Controller
      */
     public function profile()
     {
-        try {
-            if ($this->guard()->user()) {
-                return response()->json($this->guard()->user());
-            }
-        } catch (\Throwable $th) {
-            return response()->json([
-                'error' => 'Bad Request',
-                'message' => 'Please Login to view your profile'
-            ], 400);
-        }
+
+        return response()->json($this->guard()->user());
     }
 
     /**
@@ -122,7 +114,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL(),
+            'expires_in' => $this->guard()->factory()->getTTL() * 60,
             'user' => $this->guard()->user()
         ]);
     }
