@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
+
 
 class AuthController extends Controller
 {
@@ -16,16 +18,27 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth.jwt', ['except' => ['login', 'register']]);
+        $this->middleware('auth.jwt', ['except' => [
+            'login',
+            'register',
+            'createRoles',
+            'registerAsDoctor',
+            'registerAsNurse',
+            'registerAsStaff'
+
+        ]]);
     }
 
-    public function register(Request $request)
+
+    public function registerAsDoctor(Request $request)
     {
-        // dd($request->all());
         $validator = Validator::make($request->all(), [
 
         'firstname' => 'required|string|between:2,100',
         'lastname' => 'required|string|between:2,100',
+        'speciality' => 'required|string',
+        'gender' => 'required|string',
+        'DOB' => 'required',
         'username' => 'required|string|between:2,100',
         'email' => 'required|string|email|max:100|unique:users',
         'password' => 'required|string|min:6'
@@ -36,16 +49,76 @@ class AuthController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $user = User::create(array_merge(
-                    $validator->validated(),
-                    ['password' => bcrypt($request->password)]
-        ));
+        $user = User::create(array_merge($validator->validated(), [
+                        'password' => bcrypt($request->password),
+                    ]
+                ));
 
+        $user->assignRole('Doctor');
         return response()->json([
                 'message' => 'User successfully registered',
                 'user' => $user
         ]);
+    }
 
+    public function registerAsNurse(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+
+        'firstname' => 'required|string|between:2,100',
+        'lastname' => 'required|string|between:2,100',
+        'gender' => 'required|string',
+        'DOB' => 'required',
+        'username' => 'required|string|between:2,100',
+        'email' => 'required|string|email|max:100|unique:users',
+        'password' => 'required|string|min:6'
+
+      ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $user = User::create(array_merge($validator->validated(), [
+                        'password' => bcrypt($request->password),
+                    ]
+                ));
+
+        $user->assignRole('Nurse');
+        return response()->json([
+                'message' => 'User successfully registered',
+                'user' => $user
+        ]);
+    }
+
+    public function registerAsStaff(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+
+        'firstname' => 'required|string|between:2,100',
+        'lastname' => 'required|string|between:2,100',
+        'gender' => 'required|string',
+        'DOB' => 'required',
+        'username' => 'required|string|between:2,100',
+        'email' => 'required|string|email|max:100|unique:users',
+        'password' => 'required|string|min:6'
+
+      ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $user = User::create(array_merge($validator->validated(), [
+                        'password' => bcrypt($request->password),
+                    ]
+                ));
+
+        $user->assignRole('FrontDesk Staff');
+        return response()->json([
+                'message' => 'User successfully registered',
+                'user' => $user
+        ]);
     }
 
     /**
@@ -115,7 +188,8 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $this->guard()->factory()->getTTL() * 60,
-            'user' => $this->guard()->user()
+            'user' => $this->guard()->user(),
+            'role' => $this->guard()->user()->getRoleNames()
         ]);
     }
 
@@ -127,5 +201,13 @@ class AuthController extends Controller
     public function guard()
     {
         return Auth::guard();
+    }
+
+    public function createRoles()
+    {
+        Role::create(['name' => 'Doctor']);
+        Role::create(['name' => 'Nurse']);
+        Role::create(['name' => 'FrontDesk Staff']);
+        return 'created Roles';
     }
 }

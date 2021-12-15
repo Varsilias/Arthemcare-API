@@ -21,12 +21,14 @@ use App\Http\Controllers\AuthController;
 
 Route::group(['prefix' => 'v1'], function() {
     Route::group(['middleware' => ['api'], 'prefix' => 'auth'], function () {
-        Route::post('register', [AuthController::class, 'register']);
+        Route::post('register-as-doctor', [AuthController::class, 'registerAsDoctor']);
+        Route::post('register-as-nurse', [AuthController::class, 'registerAsNurse']);
+        Route::post('register-as-staff', [AuthController::class, 'registerAsStaff']);
         Route::post('login', [AuthController::class, 'login']);
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::post('profile',[AuthController::class, 'profile']);
-
+        Route::get('create-roles',[AuthController::class, 'createRoles']);
     });
 
 });

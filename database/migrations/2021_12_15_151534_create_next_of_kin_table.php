@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateNextOfKinTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,16 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('next_of_kin', function (Blueprint $table) {
             $table->id();
             $table->string('firstname');
             $table->string('lastname');
+            $table->string('DOB')->nullable();
             $table->string('gender');
-            $table->string('DOB');
-            $table->string('username');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('speciality')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->rememberToken();
+            $table->string('phone_number');
+            $table->string('email')->nullable();
+            $table->unsignedBigInteger('patient_id');
+            $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -36,6 +34,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('next_of_kin');
     }
 }
