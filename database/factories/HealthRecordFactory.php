@@ -14,7 +14,11 @@ class HealthRecordFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'temperature' => $this->faker->numberBetween(10, 100),
+            'blood_level' => $this->faker->numberBetween(10, 100),
+            'sugar_level' => $this->faker->numberBetween(1, 10),
+            'blood_pressure' => $this->faker->numberBetween(1, 10),
+            'patient_id' => $this->faker->numberBetween(1, 10),
         ];
     }
 }
