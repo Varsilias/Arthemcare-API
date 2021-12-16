@@ -14,8 +14,16 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $gender = $this->faker->randomElement(['male', 'female']);
+        $speciality = $this->faker->randomElement(['Gynaecologist', 'Paediatrics', 'Orthopaedic', 'Occulist']);
+
         return [
-            'name' => $this->faker->name(),
+            'firstname' => $this->faker->firstName(),
+            'lastname' => $this->faker->firstNameMale(),
+            'gender' => $gender,
+            'DOB' => $this->faker->dateTime(),
+            'username' => $this->faker->name(),
+            'speciality' => $speciality,
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password

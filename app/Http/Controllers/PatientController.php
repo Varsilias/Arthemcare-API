@@ -15,18 +15,14 @@ class PatientController extends Controller
      */
     public function index()
     {
-        //
+        $patients = Patient::all();
+        return response()->json([
+            'status' => 'OK',
+            'error' => false,
+            'data' => $patients
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -36,7 +32,13 @@ class PatientController extends Controller
      */
     public function store(StorePatientRequest $request)
     {
-        //
+        $patient = Patient::create($request->all());
+        return response()->json([
+            'status' => 'OK',
+            'error' => false,
+            'message' => 'Patient successfully created',
+            'data' => $patient
+        ]);
     }
 
     /**
@@ -47,18 +49,18 @@ class PatientController extends Controller
      */
     public function show(Patient $patient)
     {
-        //
-    }
+        $data = Patient::with('nextOfKins')
+                ->with('healthRecords')
+                ->with('prescriptons')
+                ->with('appointments')
+                ->where('id', $patient->id)
+                ->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Patient  $patient
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Patient $patient)
-    {
-        //
+        return response()->json([
+            'status' => 'OK',
+            'error' => false,
+            'data' => $data
+        ]);
     }
 
     /**
@@ -70,7 +72,20 @@ class PatientController extends Controller
      */
     public function update(UpdatePatientRequest $request, Patient $patient)
     {
-        //
+        // dd($request->all());
+        try {
+            $updatedPatient = Patient::find($patient->id);
+            $updatedPatient->update($request->all());
+            return response()->json([
+                'status' => 'OK',
+                'error' => false,
+                'message' => 'Patient record successfully updated',
+                'data' => $updatedPatient
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
     }
 
     /**
@@ -81,6 +96,17 @@ class PatientController extends Controller
      */
     public function destroy(Patient $patient)
     {
-        //
+        try {
+            $deletedPatient = Patient::find($patient->id);
+            $deletedPatient->delete();
+            return response()->json([
+                'status' => 'OK',
+                'error' => false,
+                'message' => 'Patient record successfully deleted',
+                'data' => $deletedPatient
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

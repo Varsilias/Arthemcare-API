@@ -22,7 +22,7 @@ class CreatePatientsTable extends Migration
             $table->string('complexion');
             $table->string('gender');
             $table->string('ward_no');
-            $table->boolean('discharged');
+            $table->boolean('discharged')->nullable()->default(false);
             $table->timestamps();
         });
     }
