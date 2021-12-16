@@ -13,7 +13,7 @@ class StoreNextOfKinRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,12 @@ class StoreNextOfKinRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "firstname" => "required|string|between:2,100",
+            "lastname" => "required|string|between:2,100",
+            "DOB" => "required|string",
+            "gender" => "required|string",
+            "phone_number" => "required|string",
+            "email" => "required|string|email",
         ];
     }
 }

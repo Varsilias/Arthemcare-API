@@ -13,8 +13,17 @@ class NextOfKinFactory extends Factory
      */
     public function definition()
     {
+        $gender = $this->faker->randomElement(['male', 'female']);
+
         return [
-            //
+            'firstname' => $this->faker->firstName(),
+            'lastname' => $this->faker->firstNameMale(),
+            'DOB' => $this->faker->dateTime(),
+            'phone_number' => $this->faker->randomNumber(8, true),
+            'gender' => $gender,
+            'email' => $this->faker->unique()->safeEmail(),
+            'patient_id' => $this->faker->numberBetween(1, 10)
+
         ];
     }
 }

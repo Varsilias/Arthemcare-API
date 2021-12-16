@@ -13,6 +13,6 @@ class NextOfKinSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\NextOfKin::factory(30)->create();
     }
 }

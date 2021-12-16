@@ -42,10 +42,10 @@ Route::group(['prefix' => 'v1'], function() {
         Route::delete('/{patient}', [PatientController::class, 'destroy']);
     });
 
-    Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'nextofkin'], function() {
-        Route::get('/', [NextOfKinController::class, 'index']);
-        Route::post('/', [NextOfKinController::class, 'store']);
-        Route::get('/{nextofkin}', [NextOfKinController::class, 'show']);
+    Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'nextofkins'], function() {
+        Route::get('/{patient}', [NextOfKinController::class, 'index']);
+        Route::post('/{patient}', [NextOfKinController::class, 'store']);
+        Route::get('/{nextofkin}/patient/{patientId}', [NextOfKinController::class, 'show']);
         Route::put('/{nextofkin}', [NextOfKinController::class, 'update']);
         Route::delete('/{nextofkin}', [NextOfKinController::class, 'destroy']);
     });
