@@ -13,6 +13,7 @@ class HealthRecordSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\HealthRecord::factory(40)->create();
+
     }
 }

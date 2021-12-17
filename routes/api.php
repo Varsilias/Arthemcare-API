@@ -51,12 +51,12 @@ Route::group(['prefix' => 'v1'], function() {
         Route::delete('/{nextofkin}', [NextOfKinController::class, 'destroy']);
     });
 
-    Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'health-records'], function() {
+    Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'healthrecords'], function() {
         Route::get('/{patient}', [HealthRecordController::class, 'index']);
         Route::post('/{patient}', [HealthRecordController::class, 'store']);
-        Route::get('/{health-records}/patient/{patientId}', [HealthRecordController::class, 'show']);
-        Route::put('/{health-records}', [HealthRecordController::class, 'update']);
-        Route::delete('/{nextofkin}', [HealthRecordController::class, 'destroy']);
+        Route::get('/{healthrecord}/patient/{patientId}', [HealthRecordController::class, 'show']);
+        // Route::put('/{healthrecord}', [HealthRecordController::class, 'update']);
+        Route::delete('/{healthrecord}', [HealthRecordController::class, 'destroy']);
     });
 });
 

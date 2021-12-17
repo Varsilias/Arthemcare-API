@@ -13,7 +13,7 @@ class StoreHealthRecordRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class StoreHealthRecordRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "temperature" => "required|string",
+		    "blood_level" => "required|string",
+		    "sugar_level" => "required|string",
+		    "blood_pressure" => "required|string",
         ];
     }
 }

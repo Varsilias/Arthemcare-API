@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\HealthRecord;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreHealthRecordRequest;
 use App\Http\Requests\UpdateHealthRecordRequest;
 
@@ -13,9 +14,16 @@ class HealthRecordController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($patientId)
     {
-        //
+        $record = HealthRecord::where('patient_id', $patientId)
+                    ->OrderBy('created_at', 'DESC')
+                    ->get();
+                return response()->json([
+                    'status' => 'OK',
+                    'error' => false,
+                    'data' => $record
+                ]);
     }
 
     /**
@@ -24,9 +32,22 @@ class HealthRecordController extends Controller
      * @param  \App\Http\Requests\StoreHealthRecordRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreHealthRecordRequest $request)
+    public function store(StoreHealthRecordRequest $request, $patientId)
     {
-        //
+        $record = HealthRecord::create([
+            "temperature" => $request->temperature,
+		    "blood_level" => $request->blood_level,
+		    "sugar_level"=> $request->sugar_level,
+		    "blood_pressure" => $request->blood_pressure,
+            "patient_id" => (int)$patientId
+        ]);
+
+        return response()->json([
+            'status' => 'OK',
+            'error' => false,
+            'message' => 'Record successfully created',
+            'data' => $record
+        ]);
     }
 
     /**
@@ -35,9 +56,14 @@ class HealthRecordController extends Controller
      * @param  \App\Models\HealthRecord  $healthRecord
      * @return \Illuminate\Http\Response
      */
-    public function show(HealthRecord $healthRecord)
+    public function show($healthRecord, $patientId)
     {
-        //
+        $record = HealthRecord::with('patient')->where('id', $healthRecord)->where('patient_id', (int)$patientId)->first();
+        return response()->json([
+            'status' => 'OK',
+            'error' => false,
+            'data' => $record
+        ]);
     }
 
 
@@ -59,8 +85,19 @@ class HealthRecordController extends Controller
      * @param  \App\Models\HealthRecord  $healthRecord
      * @return \Illuminate\Http\Response
      */
-    public function destroy(HealthRecord $healthRecord)
+    public function destroy($healthRecord)
     {
-        //
+        try {
+            $deletedRecord = HealthRecord::find($healthRecord);
+            $deletedRecord->delete();
+            return response()->json([
+                'status' => 'OK',
+                'error' => false,
+                'message' => 'Record successfully deleted',
+                'data' => $deletedRecord
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
