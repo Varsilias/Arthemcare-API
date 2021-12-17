@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HealthRecordController;
 use App\Http\Controllers\NextOfKinController;
 use App\Http\Controllers\PatientController;
 
@@ -48,6 +49,14 @@ Route::group(['prefix' => 'v1'], function() {
         Route::get('/{nextofkin}/patient/{patientId}', [NextOfKinController::class, 'show']);
         Route::put('/{nextofkin}', [NextOfKinController::class, 'update']);
         Route::delete('/{nextofkin}', [NextOfKinController::class, 'destroy']);
+    });
+
+    Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'health-records'], function() {
+        Route::get('/{patient}', [HealthRecordController::class, 'index']);
+        Route::post('/{patient}', [HealthRecordController::class, 'store']);
+        Route::get('/{health-records}/patient/{patientId}', [HealthRecordController::class, 'show']);
+        Route::put('/{health-records}', [HealthRecordController::class, 'update']);
+        Route::delete('/{nextofkin}', [HealthRecordController::class, 'destroy']);
     });
 });
 

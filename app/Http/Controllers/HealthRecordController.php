@@ -19,16 +19,6 @@ class HealthRecordController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreHealthRecordRequest  $request
@@ -50,16 +40,6 @@ class HealthRecordController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\HealthRecord  $healthRecord
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(HealthRecord $healthRecord)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
