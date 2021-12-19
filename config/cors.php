@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*', 'POST', 'GET', 'OPTIONS', 'PUT', 'DELETE'],
 
-    'allowed_origins' => ['https://arthemcare.vercel.app', 'http://localhost:3000', '*'],
+    'allowed_origins' => ['https://arthemcare.vercel.app/', 'http://localhost:3000', '*'],
 
     'allowed_origins_patterns' => [],
 
