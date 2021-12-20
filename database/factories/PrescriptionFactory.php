@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 class PrescriptionFactory extends Factory
 {
@@ -13,8 +14,12 @@ class PrescriptionFactory extends Factory
      */
     public function definition()
     {
+
         return [
-            //
+            'prescription' => $this->faker->paragraph(),
+            'comment_by_doctor' => $this->faker->paragraph(),
+            'patient_id' => $this->faker->numberBetween(1, 10),
+            'user_id' =>   $this->faker->numberBetween(1, 10)
         ];
     }
 }

@@ -19,11 +19,11 @@ class HealthRecordController extends Controller
         $record = HealthRecord::where('patient_id', $patientId)
                     ->OrderBy('created_at', 'DESC')
                     ->get();
-                return response()->json([
-                    'status' => 'OK',
-                    'error' => false,
-                    'data' => $record
-                ]);
+        return response()->json([
+            'status' => 'OK',
+            'error' => false,
+            'data' => $record
+        ]);
     }
 
     /**

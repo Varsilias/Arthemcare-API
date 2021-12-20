@@ -24,11 +24,26 @@ class AuthController extends Controller
             'createRoles',
             'registerAsDoctor',
             'registerAsNurse',
-            'registerAsStaff'
+            'registerAsStaff',
+            'getUserRoles'
 
         ]]);
     }
 
+
+    // public function getUserRoles()
+    // {
+    //     // $user = new User();
+    //     // $user->getRoleNames();
+    //     $users = User::with('roles')->get();
+    //     foreach ($users as $user) {
+    //        return response()->json([
+    //             'role' => $user['roles'][0]['name']
+    //        ]);
+    //     }
+
+
+    // }
 
     public function registerAsDoctor(Request $request)
     {

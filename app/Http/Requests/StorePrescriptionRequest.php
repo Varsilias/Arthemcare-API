@@ -13,7 +13,7 @@ class StorePrescriptionRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class StorePrescriptionRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "prescription" => "required|string|between:5,1000",
+			"comment_by_doctor" => "required|string|between:5,1000",
         ];
     }
 }

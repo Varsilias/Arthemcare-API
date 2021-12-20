@@ -13,6 +13,7 @@ class PrescriptionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\Prescription::factory(60)->create();
+
     }
 }

@@ -3,9 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HealthRecordController;
-use App\Http\Controllers\NextOfKinController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\NextOfKinController;
+use App\Http\Controllers\HealthRecordController;
+use App\Http\Controllers\PrescriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,8 @@ Route::group(['prefix' => 'v1'], function() {
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::post('profile',[AuthController::class, 'profile']);
         Route::get('create-roles',[AuthController::class, 'createRoles']);
+        Route::get('getUserRoles',[AuthController::class, 'getUserRoles']);
+
     });
 
     Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'patients'], function() {
@@ -63,6 +66,14 @@ Route::group(['prefix' => 'v1'], function() {
         Route::get('/{healthrecord}/patient/{patientId}', [HealthRecordController::class, 'show']);
         // Route::put('/{healthrecord}', [HealthRecordController::class, 'update']);
         Route::delete('/{healthrecord}', [HealthRecordController::class, 'destroy']);
+    });
+
+    Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'prescriptions'], function() {
+        Route::get('/{patient}', [PrescriptionController::class, 'index']);
+        Route::post('/{patient}', [PrescriptionController::class, 'store']);
+        Route::get('/{prescription}/patient/{patientId}', [PrescriptionController::class, 'show']);
+        Route::put('/{nextofkin}', [PrescriptionController::class, 'update']);
+        Route::delete('/{nextofkin}', [PrescriptionController::class, 'destroy']);
     });
 });
 
