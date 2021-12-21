@@ -14,7 +14,9 @@ class AppointmentFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'scheduled_at' => $this->faker->dateTime(new \DateTime()),
+            'patient_id' => $this->faker->numberBetween(1, 10),
+            'user_id' =>   $this->faker->numberBetween(1, 10)
         ];
     }
 }

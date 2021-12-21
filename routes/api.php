@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -19,12 +20,6 @@ use App\Http\Controllers\PrescriptionController;
 |
 */
 
-// header("Cache-Control: no-cache, must-revalidate");
-// header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-// header('Access-Control-Allow-Origin:  *');
-// header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
-// header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
-
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
@@ -39,8 +34,7 @@ Route::group(['prefix' => 'v1'], function() {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::post('profile',[AuthController::class, 'profile']);
-        Route::get('create-roles',[AuthController::class, 'createRoles']);
-        Route::get('getUserRoles',[AuthController::class, 'getUserRoles']);
+        // Route::get('getUserRoles',[AuthController::class, 'getUserRoles']);
 
     });
 
@@ -64,7 +58,6 @@ Route::group(['prefix' => 'v1'], function() {
         Route::get('/{patient}', [HealthRecordController::class, 'index']);
         Route::post('/{patient}', [HealthRecordController::class, 'store']);
         Route::get('/{healthrecord}/patient/{patientId}', [HealthRecordController::class, 'show']);
-        // Route::put('/{healthrecord}', [HealthRecordController::class, 'update']);
         Route::delete('/{healthrecord}', [HealthRecordController::class, 'destroy']);
     });
 
@@ -72,8 +65,14 @@ Route::group(['prefix' => 'v1'], function() {
         Route::get('/{patient}', [PrescriptionController::class, 'index']);
         Route::post('/{patient}', [PrescriptionController::class, 'store']);
         Route::get('/{prescription}/patient/{patientId}', [PrescriptionController::class, 'show']);
-        Route::put('/{nextofkin}', [PrescriptionController::class, 'update']);
-        Route::delete('/{nextofkin}', [PrescriptionController::class, 'destroy']);
+        Route::delete('/{prescription}', [PrescriptionController::class, 'destroy']);
+    });
+
+    Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'appointments'], function() {
+        Route::get('/{patient}', [AppointmentController::class, 'index']);
+        Route::post('/{patient}', [AppointmentController::class, 'store']);
+        Route::get('/', [AppointmentController::class, 'getAppointmentHistory']);
+
     });
 });
 

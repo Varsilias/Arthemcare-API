@@ -217,12 +217,4 @@ class AuthController extends Controller
     {
         return Auth::guard();
     }
-
-    public function createRoles()
-    {
-        Role::create(['name' => 'Doctor']);
-        Role::create(['name' => 'Nurse']);
-        Role::create(['name' => 'FrontDesk Staff']);
-        return 'created Roles';
-    }
 }
