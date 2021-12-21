@@ -40,38 +40,38 @@ Route::group(['prefix' => 'v1'], function() {
 
     Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'patients'], function() {
         Route::get('/', [PatientController::class, 'index']);
-        Route::post('/', [PatientController::class, 'store']);
+        Route::post('/', [PatientController::class, 'store'])->middleware('role:FrontDesk Staff');
         Route::get('/{patient}', [PatientController::class, 'show']);
-        Route::put('/{patient}', [PatientController::class, 'update']);
-        Route::delete('/{patient}', [PatientController::class, 'destroy']);
+        Route::put('/{patient}', [PatientController::class, 'update'])->middleware('role:FrontDesk Staff');
+        Route::delete('/{patient}', [PatientController::class, 'destroy'])->middleware('role:FrontDesk Staff');
     });
 
     Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'nextofkins'], function() {
         Route::get('/{patient}', [NextOfKinController::class, 'index']);
-        Route::post('/{patient}', [NextOfKinController::class, 'store']);
+        Route::post('/{patient}', [NextOfKinController::class, 'store'])->middleware('role:FrontDesk Staff');
         Route::get('/{nextofkin}/patient/{patientId}', [NextOfKinController::class, 'show']);
-        Route::put('/{nextofkin}', [NextOfKinController::class, 'update']);
-        Route::delete('/{nextofkin}', [NextOfKinController::class, 'destroy']);
+        Route::put('/{nextofkin}', [NextOfKinController::class, 'update'])->middleware('role:FrontDesk Staff');
+        Route::delete('/{nextofkin}', [NextOfKinController::class, 'destroy'])->middleware('role:FrontDesk Staff');
     });
 
     Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'healthrecords'], function() {
         Route::get('/{patient}', [HealthRecordController::class, 'index']);
-        Route::post('/{patient}', [HealthRecordController::class, 'store']);
+        Route::post('/{patient}', [HealthRecordController::class, 'store'])->middleware('role:Nurse');
         Route::get('/{healthrecord}/patient/{patientId}', [HealthRecordController::class, 'show']);
-        Route::delete('/{healthrecord}', [HealthRecordController::class, 'destroy']);
+        Route::delete('/{healthrecord}', [HealthRecordController::class, 'destroy'])->middleware('role:Nurse');
     });
 
     Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'prescriptions'], function() {
         Route::get('/{patient}', [PrescriptionController::class, 'index']);
-        Route::post('/{patient}', [PrescriptionController::class, 'store']);
+        Route::post('/{patient}', [PrescriptionController::class, 'store'])->middleware('role:Doctor');
         Route::get('/{prescription}/patient/{patientId}', [PrescriptionController::class, 'show']);
-        Route::delete('/{prescription}', [PrescriptionController::class, 'destroy']);
+        Route::delete('/{prescription}', [PrescriptionController::class, 'destroy'])->middleware('role:Doctor');
     });
 
     Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'appointments'], function() {
         Route::get('/{patient}', [AppointmentController::class, 'index']);
-        Route::post('/{patient}', [AppointmentController::class, 'store']);
-        Route::get('/', [AppointmentController::class, 'getAppointmentHistory']);
+        Route::post('/{patient}', [AppointmentController::class, 'store'])->middleware('role:Doctor');
+        Route::get('/', [AppointmentController::class, 'getAppointmentHistory'])->middleware('role:Doctor');
 
     });
 });
