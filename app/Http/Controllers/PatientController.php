@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Patient;
 use App\Http\Requests\StorePatientRequest;
 use App\Http\Requests\UpdatePatientRequest;
+use App\Response\ApiResponse;
 
 class PatientController extends Controller
 {
@@ -13,14 +14,10 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ApiResponse $response)
     {
         $patients = Patient::all();
-        return response()->json([
-            'status' => 'OK',
-            'error' => false,
-            'data' => $patients
-        ]);
+        return $response->successResponse($patients);
     }
 
 
@@ -30,15 +27,10 @@ class PatientController extends Controller
      * @param  \App\Http\Requests\StorePatientRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePatientRequest $request)
+    public function store(StorePatientRequest $request, ApiResponse $response)
     {
         $patient = Patient::create($request->all());
-        return response()->json([
-            'status' => 'OK',
-            'error' => false,
-            'message' => 'Patient successfully created',
-            'data' => $patient
-        ]);
+        return $response->successResponse($patient, 'Patient successfully created');
     }
 
     /**
@@ -47,20 +39,16 @@ class PatientController extends Controller
      * @param  \App\Models\Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function show(Patient $patient)
+    public function show(ApiResponse $response, Patient $patient)
     {
-        $data = Patient::with('nextOfKins')
+        $patient = Patient::with('nextOfKins')
                 ->with('healthRecords')
                 ->with('prescriptons')
                 ->with('appointments')
                 ->where('id', $patient->id)
                 ->get();
+        return $response->successResponse($patient);
 
-        return response()->json([
-            'status' => 'OK',
-            'error' => false,
-            'data' => $data
-        ]);
     }
 
     /**
@@ -70,21 +58,11 @@ class PatientController extends Controller
      * @param  \App\Models\Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePatientRequest $request, Patient $patient)
+    public function update(UpdatePatientRequest $request, ApiResponse $response, Patient $patient)
     {
-        // dd($request->all());
-        try {
-            $updatedPatient = Patient::find($patient->id);
-            $updatedPatient->update($request->all());
-            return response()->json([
-                'status' => 'OK',
-                'error' => false,
-                'message' => 'Patient record successfully updated',
-                'data' => $updatedPatient
-            ]);
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+            $patient = Patient::find($patient->id);
+            $patient->update($request->all());
+            return $response->successResponse($patient, 'Patient record successfully updated');
 
     }
 
@@ -94,19 +72,11 @@ class PatientController extends Controller
      * @param  \App\Models\Patient  $patient
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Patient $patient)
+    public function destroy(ApiResponse $response, Patient $patient)
     {
-        try {
-            $deletedPatient = Patient::find($patient->id);
-            $deletedPatient->delete();
-            return response()->json([
-                'status' => 'OK',
-                'error' => false,
-                'message' => 'Patient record successfully deleted',
-                'data' => $deletedPatient
-            ]);
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+        $patient = Patient::find($patient->id);
+        $patient->delete();
+        return $response->successResponse($patient, 'Patient record successfully deleted');
+
     }
 }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Patient;
 use App\Models\NextOfKin;
+use App\Response\ApiResponse;
 use App\Http\Requests\StoreNextOfKinRequest;
 use App\Http\Requests\UpdateNextOfKinRequest;
-use App\Models\Patient;
 
 class NextOfKinController extends Controller
 {
@@ -14,14 +15,11 @@ class NextOfKinController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Patient $patient)
+    public function index(ApiResponse $response, Patient $patient)
     {
         $nextOfKins = NextOfKin::where('patient_id', $patient->id)->get();
-        return response()->json([
-            'status' => 'OK',
-            'error' => false,
-            'data' => $nextOfKins
-        ]);
+        return $response->successResponse($nextOfKins);
+
     }
 
     /**
@@ -30,25 +28,14 @@ class NextOfKinController extends Controller
      * @param  \App\Http\Requests\StoreNextOfKinRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreNextOfKinRequest $request, $patientId)
+    public function store(StoreNextOfKinRequest $request, ApiResponse $response, $patientId)
     {
         // dd($patientId);
-        $nextOfKin = NextOfKin::create([
-            "firstname" => $request->firstname,
-            "lastname" => $request->lastname,
-            "DOB" =>  $request->DOB,
-            "gender" =>  $request->gender,
-            "phone_number" =>  $request->phone_number,
-            "email" =>  $request->email,
+        $nextOfKin = NextOfKin::create(array_merge($request->all(), [
             "patient_id" => (int)$patientId
-        ]);
+        ]));
+        return $response->successResponse($nextOfKin, 'Next Of Kin successfully created');
 
-        return response()->json([
-            'status' => 'OK',
-            'error' => false,
-            'message' => 'Next Of Kin successfully created',
-            'data' => $nextOfKin
-        ]);
     }
 
     /**
@@ -57,17 +44,13 @@ class NextOfKinController extends Controller
      * @param  \App\Models\NextOfKin  $nextOfKin
      * @return \Illuminate\Http\Response
      */
-    public function show($nextOfKin, $patientId)
+    public function show(ApiResponse $response, $nextOfKin, $patientId)
     {
         // dd($nextOfKin, $patientId);
                 // dd($nextOfKin, $patientId);
         $data = NextOfKin::with('patient')->where('id', $nextOfKin)->where('patient_id', (int)$patientId)->first();
+        return $response->successResponse($data);
 
-        return response()->json([
-            'status' => 'OK',
-            'error' => false,
-            'data' => $data
-        ]);
     }
 
 
@@ -78,20 +61,13 @@ class NextOfKinController extends Controller
      * @param  \App\Models\NextOfKin  $nextOfKin
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateNextOfKinRequest $request, $nextOfKin)
+    public function update(UpdateNextOfKinRequest $request, ApiResponse $response, $nextOfKin)
     {
-        try {
-            $updatedNok = NextOfKin::find($nextOfKin);
-            $updatedNok->update($request->all());
-            return response()->json([
-                'status' => 'OK',
-                'error' => false,
-                'message' => 'Next Of Kin record successfully updated',
-                'data' => $updatedNok
-            ]);
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+            $data = NextOfKin::find($nextOfKin);
+            $data->update($request->all());
+            return $response->successResponse($data);
+
+
     }
 
     /**
@@ -100,19 +76,12 @@ class NextOfKinController extends Controller
      * @param  \App\Models\NextOfKin  $nextOfKin
      * @return \Illuminate\Http\Response
      */
-    public function destroy($nextOfKin)
+    public function destroy(ApiResponse $response, $nextOfKin)
     {
-        try {
-            $deletedNok = NextOfKin::find($nextOfKin);
-            $deletedNok->delete();
-            return response()->json([
-                'status' => 'OK',
-                'error' => false,
-                'message' => 'Next Of Kin successfully deleted',
-                'data' => $deletedNok
-            ]);
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+            $data = NextOfKin::find($nextOfKin);
+            $data->delete();
+            return $response->successResponse($data);
+
+
     }
 }

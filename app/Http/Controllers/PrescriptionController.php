@@ -7,6 +7,7 @@ use App\Models\Prescription;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePrescriptionRequest;
 use App\Http\Requests\UpdatePrescriptionRequest;
+use App\Response\ApiResponse;
 
 class PrescriptionController extends Controller
 {
@@ -15,16 +16,12 @@ class PrescriptionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($patientId)
+    public function index(ApiResponse $response, $patientId)
     {
         $prescription = Prescription::where('patient_id', $patientId)
                     ->OrderBy('created_at', 'DESC')
                     ->get();
-        return response()->json([
-            'status' => 'OK',
-            'error' => false,
-            'data' => $prescription
-        ]);
+        return $response->successResponse($prescription);
     }
 
     /**
@@ -33,23 +30,17 @@ class PrescriptionController extends Controller
      * @param  \App\Http\Requests\StorePrescriptionRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePrescriptionRequest $request, $patientId)
+    public function store(StorePrescriptionRequest $request, ApiResponse $response, $patientId)
     {
         // dd($request->all());
 
-        $prescription = Prescription::create([
-            "prescription" => $request->prescription,
-		    "comment_by_doctor" => $request->comment_by_doctor,
-		    "user_id" => Auth::user()->id,
-            "patient_id" => (int)$patientId
-        ]);
-
-        return response()->json([
-            'status' => 'OK',
-            'error' => false,
-            'message' => 'Prescription successfully created',
-            'data' => $prescription
-        ]);
+        $prescription = Prescription::create(
+                array_merge($request->all(), [
+                "user_id" => Auth::user()->id,
+                "patient_id" => (int)$patientId
+            ])
+        );
+        return $response->successResponse($prescription, 'Prescription successfully created');
     }
 
     /**
@@ -58,14 +49,10 @@ class PrescriptionController extends Controller
      * @param  \App\Models\Prescription  $prescription
      * @return \Illuminate\Http\Response
      */
-    public function show($prescription, $patientId)
+    public function show(ApiResponse $response, $prescriptionId, $patientId)
     {
-        $prescription = Prescription::with('patient')->with('user')->where('id', $prescription)->where('patient_id', (int)$patientId)->first();
-        return response()->json([
-            'status' => 'OK',
-            'error' => false,
-            'data' => $prescription
-        ]);
+        $prescription = Prescription::with('patient')->with('user')->where('id', $prescriptionId)->where('patient_id', (int)$patientId)->first();
+        return $response->successResponse($prescription);
     }
 
     /**
@@ -85,20 +72,13 @@ class PrescriptionController extends Controller
      * @param  \App\Models\Prescription  $prescription
      * @return \Illuminate\Http\Response
      */
-    public function destroy($prescription)
+    public function destroy(ApiResponse $response, $prescriptionId)
     {
-        try {
-            $deletedPrescription = Prescription::find($prescription);
-            $deletedPrescription->delete();
-            return response()->json([
-                'status' => 'OK',
-                'error' => false,
-                'message' => 'Prescription successfully deleted',
-                'data' => $deletedPrescription
-            ]);
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+            $prescription = Prescription::find($prescriptionId);
+            $prescription->delete();
+            return $response->successResponse($prescription);
+
+
     }
 
 }
