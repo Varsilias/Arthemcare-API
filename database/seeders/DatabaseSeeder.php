@@ -6,7 +6,9 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\PatientSeeder;
 use Database\Seeders\NextOfKinSeeder;
+use Database\Seeders\AppointmentSeeder;
 use Database\Seeders\HealthRecordSeeder;
+use Database\Seeders\PrescriptionSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,7 +23,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PatientSeeder::class,
             NextOfKinSeeder::class,
-            HealthRecordSeeder::class
+            HealthRecordSeeder::class,
+            PrescriptionSeeder::class,
+            AppointmentSeeder::class
         ]);
     }
 }
