@@ -43,7 +43,7 @@ class PatientController extends Controller
     {
         $patient = Patient::with('nextOfKins')
                 ->with('healthRecords')
-                ->with('prescriptons')
+                ->with('prescriptions')
                 ->with('appointments')
                 ->where('id', $patient->id)
                 ->get();

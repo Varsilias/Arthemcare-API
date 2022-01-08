@@ -154,6 +154,13 @@ class AuthController extends Controller
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 
+    public function getDoctors()
+    {
+        $doctors = User::where('role_id', 1)->get();
+        return response()->json([
+            'doctors' => $doctors
+        ]);
+    }
     /**
      * Get the authenticated User
      *

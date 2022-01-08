@@ -34,7 +34,6 @@ Route::group(['prefix' => 'v1'], function() {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('refresh', [AuthController::class, 'refresh']);
         Route::post('profile',[AuthController::class, 'profile']);
-        // Route::get('getUserRoles',[AuthController::class, 'getUserRoles']);
 
     });
 
@@ -70,8 +69,10 @@ Route::group(['prefix' => 'v1'], function() {
 
     Route::group(['middleware' => ['auth.jwt', 'api'], 'prefix' => 'appointments'], function() {
         Route::get('/{patient}', [AppointmentController::class, 'index']);
-        Route::post('/{patient}', [AppointmentController::class, 'store'])->middleware('role:Doctor');
+        Route::post('/{patient}', [AppointmentController::class, 'store'])->middleware('role:FrontDesk Staff');
         Route::get('/', [AppointmentController::class, 'getAppointmentHistory'])->middleware('role:Doctor');
+        Route::get('/doctors',[AppointmentController::class, 'getDoctors']);
+
 
     });
 });

@@ -44,8 +44,11 @@ class AppointmentController extends Controller
     {
         // dd(Auth::user()->getRoleNames()[0]);
         $appointment = Appointment::where('user_id', Auth::user()->id)
-                        ->with('patient')->with('user')->get();
-        return $response->successResponse($appointment, 'Appointment successfully created');
+                        ->OrderBy('scheduled_at', 'DESC')
+                        ->with('patient')
+                        ->with('user')
+                        ->get();
+        return $response->successResponse($appointment);
 
     }
     /**

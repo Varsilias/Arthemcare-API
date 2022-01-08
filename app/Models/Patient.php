@@ -25,7 +25,7 @@ class Patient extends Model
         return $this->hasMany(HealthRecord::class);
     }
 
-    public function prescriptons()
+    public function prescriptions()
     {
         return $this->hasMany(Prescription::class);
     }

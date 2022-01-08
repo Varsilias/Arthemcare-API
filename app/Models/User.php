@@ -62,7 +62,7 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function prescriptons()
+    public function prescriptions()
     {
         return $this->hasMany(Prescription::class);
     }
