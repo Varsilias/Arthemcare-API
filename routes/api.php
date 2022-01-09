@@ -33,7 +33,9 @@ Route::group(['prefix' => 'v1'], function() {
         Route::post('login', [AuthController::class, 'login']);
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('refresh', [AuthController::class, 'refresh']);
-        Route::post('profile',[AuthController::class, 'profile']);
+        Route::post('profile', [AuthController::class, 'profile']);
+        Route::get('doctors', [AuthController::class, 'getDoctors']);
+
 
     });
 
@@ -71,7 +73,6 @@ Route::group(['prefix' => 'v1'], function() {
         Route::get('/{patient}', [AppointmentController::class, 'index']);
         Route::post('/{patient}', [AppointmentController::class, 'store'])->middleware('role:FrontDesk Staff');
         Route::get('/', [AppointmentController::class, 'getAppointmentHistory'])->middleware('role:Doctor');
-        Route::get('/doctors',[AppointmentController::class, 'getDoctors']);
 
 
     });

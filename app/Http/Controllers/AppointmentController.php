@@ -33,7 +33,7 @@ class AppointmentController extends Controller
     {
         $appointment = Appointment::create([
             "scheduled_at" => $request->scheduled_at,
-		    "user_id" => Auth::user()->id,
+		    "user_id" => $request->user_id,
             "patient_id" => (int)$patientId
         ]);
         return $response->successResponse($appointment, 'Appointment successfully created');

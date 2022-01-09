@@ -24,7 +24,8 @@ class StoreAppointmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'scheduled_at' => 'required|date_format:Y-m-d H:i:s'
+            'scheduled_at' => 'required',
+            'user_id' => 'required|integer'
         ];
     }
 }

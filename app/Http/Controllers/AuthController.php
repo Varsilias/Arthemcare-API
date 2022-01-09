@@ -25,7 +25,8 @@ class AuthController extends Controller
             'registerAsDoctor',
             'registerAsNurse',
             'registerAsStaff',
-            'getUserRoles'
+            // 'getUserRoles',
+            // 'getDoctors'
 
         ]]);
     }
@@ -156,7 +157,7 @@ class AuthController extends Controller
 
     public function getDoctors()
     {
-        $doctors = User::where('role_id', 1)->get();
+        $doctors = User::whereHas("roles", function($q){ $q->where("name", "Doctor"); })->get();
         return response()->json([
             'doctors' => $doctors
         ]);
